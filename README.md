@@ -1,3 +1,5 @@
+# Report: [report.pdf](report.pdf)
+
 # Bag of Visual Words for Image Classification
 
 _Computer Vision 1 – Final Lab (Part I)_  
