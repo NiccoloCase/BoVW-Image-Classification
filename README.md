@@ -1,80 +1,136 @@
-# 🧠 Bag of Visual Words for Image Classification
+# Bag of Visual Words for Image Classification
 
-> Implementation and analysis of a **Bag of Visual Words (BoVW)** model for image classification, comparing **SIFT** and **ORB** feature detectors combined with **k-means** clustering and **SVM** classification.
-
----
-
-## 📘 Overview
-
-This repository contains the source code and analysis supporting the report:
-
-> _"Bag of Visual Words for Image Classification: A Comparison Between SIFT and ORB Feature Detectors"_  
-> by **Niccolò Caselli**, Politecnico di Milano.
-
-The project explores how different feature extraction methods and clustering parameters affect the classification performance of the BoVW pipeline.
+_Computer Vision 1 – Final Lab (Part I)_  
+**University of Amsterdam, Informatics Institute**  
+**Authors:** Isabelle Mudadalam (15494349), Niccolò Caselli (16391888), Marthe Schnieders (12749958)
 
 ---
 
-## ⚙️ Methodology
+## 🧠 Abstract
 
-The BoVW pipeline implemented includes the following stages:
+This project implements and evaluates a **Bag of Visual Words (BoVW)** image classification pipeline on five CIFAR-10 classes: _frog, automobile, bird, cat, and deer_.  
+Through extensive hyperparameter search, we compare **SIFT** and **ORB** feature detectors combined with **K-Means clustering** and **SVM classification**.
 
-1. **Feature Extraction** — SIFT or ORB keypoints and descriptors.
-2. **Visual Vocabulary Construction** — k-means clustering to form visual words.
-3. **Feature Representation** — histograms of visual word occurrences.
-4. **Classification** — Support Vector Machine (SVM) with linear or RBF kernel.
+- SIFT achieved a **maximum mAP of 0.47**
+- ORB achieved **mAP of 0.29**
+
+The best configuration uses **SIFT (500 features)**, **1,500 visual words**, and an **RBF kernel SVM**.
 
 ---
 
-## 🧩 Architecture Diagram
+## 📚 Methodology
+
+### 1. Dataset
+
+Subset of **CIFAR-10**, resized to 32×32 pixels and limited to five categories.
+
+### 2. Feature Extraction
+
+Two detectors were compared:
+
+- **SIFT** (Scale-Invariant Feature Transform)
+- **ORB** (Oriented FAST and Rotated BRIEF)
+
+| Class      | SIFT keypoints | ORB keypoints |
+| ---------- | -------------- | ------------- |
+| Frog       | 67.82 ± 28.49  | 36.17 ± 24.76 |
+| Automobile | 56.25 ± 22.58  | 34.90 ± 19.50 |
+| Bird       | 39.22 ± 20.57  | 18.32 ± 14.71 |
+| Cat        | 43.57 ± 22.87  | 22.22 ± 19.33 |
+| Deer       | 43.87 ± 21.62  | 21.37 ± 16.60 |
 
 <p align="center">
-  <img src="figures/pipeline.png" width="700" alt="BoVW pipeline diagram"/>
+  <img src="sift_keypoints.png" width="45%"/> 
+  <img src="orb_keypoints.png" width="45%"/>
 </p>
 
 ---
 
-## 📊 Results
+## 🧩 Visual Vocabulary Construction
 
-### Quantitative Evaluation
-
-| Feature Detector | Clusters | Kernel | mAP (%)  |
-| ---------------- | -------- | ------ | -------- |
-| SIFT             | 1500     | RBF    | **89.7** |
-| ORB              | 1500     | RBF    | 78.2     |
-| SIFT             | 1000     | Linear | 83.4     |
+A **MiniBatchKMeans** algorithm built vocabularies with 1000 clusters (visual words).  
+Three dataset proportions were tested: 30%, 40%, 50%.
 
 <p align="center">
-  <img src="figures/mAP_vs_clusters.png" width="600" alt="mAP vs Clusters"/>
+  <img src="imgs/voc_sift_50.png" width="45%"/>
+  <img src="imgs/voc_orb_50.png" width="45%"/>
 </p>
 
 ---
 
-### Qualitative Evaluation
+## 📊 Feature Representation
 
-#### SIFT
+Images were encoded as histograms of visual word frequencies.
 
 <p align="center">
-  <img src="figures/qualitative_sift.png" width="700" alt="SIFT qualitative results"/>
+  <img src="imgs/hist_sift_50.png" width="90%"/>
+  <img src="imgs/hist_orb_50.png" width="90%"/>
 </p>
 
-#### ORB
+Average histograms per class:
 
 <p align="center">
-  <img src="figures/qualitative_orb.png" width="700" alt="ORB qualitative results"/>
-</p>
-
-#### Mean Histograms
-
-<p align="center">
-  <img src="figures/mean_histograms.png" width="700" alt="Mean histograms per class"/>
+  <img src="imgs/mean_bovw_sift.png" width="90%"/>
+  <img src="imgs/mean_bovw_orb.png" width="90%"/>
 </p>
 
 ---
 
-## 🧠 Key Findings
+## ⚙️ Hyperparameter Search
 
-- **SIFT** produces more distinctive and stable keypoints than ORB.
-- The **RBF kernel** consistently outperforms the linear kernel in classification tasks.
-- Increasing the number of clusters up to around **1500 visual words** improves mAP before plateauing.
-- **ORB** struggles at smaller image scales and benefits from upscaling.
+A total of **1,296 configurations** were tested varying:
+
+- Detector type, number of features, and upscale factor
+- Vocabulary size and training subset size
+- SVM kernel, C, and γ parameters
+
+<p align="center">
+  <img src="imgs/hyperparameter_search/detector_mAP_boxplot.png" width="45%"/>
+  <img src="imgs/hyperparameter_search/svm_kernel_mAP_boxplot.png" width="45%"/>
+</p>
+
+Best configuration:
+
+- **Detector:** SIFT
+- **#Features:** 500
+- **Visual words:** 1500
+- **Subset:** 30%
+- **Kernel:** RBF
+- **C:** 1.0
+- **γ:** scale
+- **mAP:** 0.4716
+
+<p align="center">
+  <img src="imgs/top-5.png" width="45%"/>
+  <img src="imgs/worst-5.png" width="45%"/>
+</p>
+
+---
+
+## 🧠 Qualitative Evaluation
+
+Top-5 and bottom-5 retrieval examples:
+
+<p align="center">
+  <img src="imgs/qualitative/sift_car_0.png" width="80%"/>
+  <img src="imgs/qualitative/sift_cat_0.png" width="80%"/>
+  <img src="imgs/qualitative/sift_frog_0.png" width="80%"/>
+</p>
+
+<p align="center">
+  <img src="imgs/qualitative/orb_car_0.png" width="80%"/>
+  <img src="imgs/qualitative/orb_cat_0.png" width="80%"/>
+  <img src="imgs/qualitative/orb_frog_0.png" width="80%"/>
+</p>
+
+---
+
+## 🏁 Conclusion
+
+- **SIFT** provides superior and more stable features than **ORB**, which struggled at small scales.
+- The BoVW framework achieved **mAP ≈ 0.47**, demonstrating the limitations of hand-crafted features.
+- Future work: replace BoVW with **deep visual embeddings (e.g., CLIP or Vision Transformers)** to improve representation power.
+
+---
+
+## 📂 Repository Structure
