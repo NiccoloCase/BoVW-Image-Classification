@@ -39,11 +39,6 @@ Two detectors were compared:
 | Cat        | 43.57 ± 22.87  | 22.22 ± 19.33 |
 | Deer       | 43.87 ± 21.62  | 21.37 ± 16.60 |
 
-<p align="center">
-  <img src="sift_keypoints.png" width="45%"/> 
-  <img src="orb_keypoints.png" width="45%"/>
-</p>
-
 ---
 
 ## 🧩 Visual Vocabulary Construction
@@ -100,29 +95,6 @@ Best configuration:
 - **γ:** scale
 - **mAP:** 0.4716
 
-<p align="center">
-  <img src="imgs/top-5.png" width="45%"/>
-  <img src="imgs/worst-5.png" width="45%"/>
-</p>
-
----
-
-## 🧠 Qualitative Evaluation
-
-Top-5 and bottom-5 retrieval examples:
-
-<p align="center">
-  <img src="imgs/qualitative/sift_car_0.png" width="80%"/>
-  <img src="imgs/qualitative/sift_cat_0.png" width="80%"/>
-  <img src="imgs/qualitative/sift_frog_0.png" width="80%"/>
-</p>
-
-<p align="center">
-  <img src="imgs/qualitative/orb_car_0.png" width="80%"/>
-  <img src="imgs/qualitative/orb_cat_0.png" width="80%"/>
-  <img src="imgs/qualitative/orb_frog_0.png" width="80%"/>
-</p>
-
 ---
 
 ## 🏁 Conclusion
@@ -130,7 +102,3 @@ Top-5 and bottom-5 retrieval examples:
 - **SIFT** provides superior and more stable features than **ORB**, which struggled at small scales.
 - The BoVW framework achieved **mAP ≈ 0.47**, demonstrating the limitations of hand-crafted features.
 - Future work: replace BoVW with **deep visual embeddings (e.g., CLIP or Vision Transformers)** to improve representation power.
-
----
-
-## 📂 Repository Structure
