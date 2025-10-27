@@ -1,35 +1,80 @@
-# CV1 Final Lab Part 1
+# 🧠 Bag of Visual Words for Image Classification
 
-This repository contains the Jupyter Notebook for **Final Lab (Part 1)** of the **Computer Vision 1** course, part of the **Master's in Artificial Intelligence** program at the **University of Amsterdam**. The lab exercises are designed to deepen your understanding of key computer vision concepts and provide hands-on experience with popular Python libraries such as OpenCV, NumPy, and Matplotlib.
+> Implementation and analysis of a **Bag of Visual Words (BoVW)** model for image classification, comparing **SIFT** and **ORB** feature detectors combined with **k-means** clustering and **SVM** classification.
 
-## Table of Contents
+---
 
-- [Overview](#overview)
-- [Environment Setup](#environment-setup)
-- [File Structure](#file-structure)
+## 📘 Overview
 
-## Overview
+This repository contains the source code and analysis supporting the report:
 
-Digital cameras are everywhere, embedded in consumer cameras, webcams, mobile phones, and professional equipment. These devices generate vast amounts of data, crucial for communication, observation, and interaction. This course focuses on the computational techniques used to enable computers to understand the visual world, with a particular emphasis on scene understanding and object recognition.
+> _"Bag of Visual Words for Image Classification: A Comparison Between SIFT and ORB Feature Detectors"_  
+> by **Niccolò Caselli**, Politecnico di Milano.
 
-The course covers a wide range of topics, including:
-- Image formation and filtering
-- Feature extraction (color and shape invariants, interest point detectors, descriptors like SIFT and HoG)
-- Visual information representation (vector space, statistical models, Bag-of-Words)
-- Learning and classification techniques, including deep learning (DL)
-- Object detection and classification, object tracking
+The project explores how different feature extraction methods and clustering parameters affect the classification performance of the BoVW pipeline.
 
-## Environment Setup
+---
 
-Students should provide their own Python environment to run the Jupyter Notebook.
+## ⚙️ Methodology
 
-## File Structure
+The BoVW pipeline implemented includes the following stages:
 
-```markdown
-cv1-final-lab-part-1/
-│
-├── .gitignore
-├── cv1-final-lab-part-1.ipynb
-├── LICENSE
-└── README.md
-```
+1. **Feature Extraction** — SIFT or ORB keypoints and descriptors.
+2. **Visual Vocabulary Construction** — k-means clustering to form visual words.
+3. **Feature Representation** — histograms of visual word occurrences.
+4. **Classification** — Support Vector Machine (SVM) with linear or RBF kernel.
+
+---
+
+## 🧩 Architecture Diagram
+
+<p align="center">
+  <img src="figures/pipeline.png" width="700" alt="BoVW pipeline diagram"/>
+</p>
+
+---
+
+## 📊 Results
+
+### Quantitative Evaluation
+
+| Feature Detector | Clusters | Kernel | mAP (%)  |
+| ---------------- | -------- | ------ | -------- |
+| SIFT             | 1500     | RBF    | **89.7** |
+| ORB              | 1500     | RBF    | 78.2     |
+| SIFT             | 1000     | Linear | 83.4     |
+
+<p align="center">
+  <img src="figures/mAP_vs_clusters.png" width="600" alt="mAP vs Clusters"/>
+</p>
+
+---
+
+### Qualitative Evaluation
+
+#### SIFT
+
+<p align="center">
+  <img src="figures/qualitative_sift.png" width="700" alt="SIFT qualitative results"/>
+</p>
+
+#### ORB
+
+<p align="center">
+  <img src="figures/qualitative_orb.png" width="700" alt="ORB qualitative results"/>
+</p>
+
+#### Mean Histograms
+
+<p align="center">
+  <img src="figures/mean_histograms.png" width="700" alt="Mean histograms per class"/>
+</p>
+
+---
+
+## 🧠 Key Findings
+
+- **SIFT** produces more distinctive and stable keypoints than ORB.
+- The **RBF kernel** consistently outperforms the linear kernel in classification tasks.
+- Increasing the number of clusters up to around **1500 visual words** improves mAP before plateauing.
+- **ORB** struggles at smaller image scales and benefits from upscaling.
